@@ -7,36 +7,36 @@
 #    host: db.fisherfamily.com
 
 # MYSQL
-development:
-  adapter: mysql
-  database: enginey_development
-  username: root
-  password:  
-  host: localhost
+#development:
+#  adapter: mysql
+#  database: enginey_development
+#  username: root
+#  password:  
+#  host: localhost
 
-test:
-  adapter: mysql
-  database: enginey_test
-  username: root
-  password:  
-  host: localhost
+#test:
+#  adapter: mysql
+#  database: enginey_test
+#  username: root
+#  password:  
+#  host: localhost
   
 
 # POSTGRES
-#development:
-#  adapter: postgresql
-#  database: enginey_development
-#  username: postgres
-#  password: postgres
-#  host: localhost
-#  encoding: UTF8
+development:
+  adapter: postgresql
+  database: enginey_development
+  username: catalogue
+  password: t3s3raDeV
+  host: localhost
+  encoding: UTF8
 
-#test:
-#  adapter: postgresql
-#  database: enginey_test
-#  username: postgres
-#  password: postgres
-#  host: localhost
-#  encoding: UTF8
+test:
+  adapter: postgresql
+  database: enginey_test
+  username: catalogue
+  password: t3s3raDeV
+  host: localhost
+  encoding: UTF8
 
 

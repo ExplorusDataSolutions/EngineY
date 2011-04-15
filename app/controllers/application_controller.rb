@@ -47,7 +47,11 @@ class ApplicationController < ActionController::Base
   
   def api_filter
     if params[:format] && params[:format] != 'html' 
-      logged_in? || access_denied
+      if !logged_in?
+        authenticate_or_request_with_http_basic do |login, password|
+          self.current_user = User.authenticate(login, password)
+        end
+      end
     end
   end
   

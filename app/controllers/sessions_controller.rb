@@ -17,9 +17,11 @@ class SessionsController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include AuthenticatedSystem
 
+  skip_filter :api_filter, :only => :create
+
 
   def new
-end
+  end
 
 
   def test
@@ -90,15 +92,16 @@ end
         #redirect_back_or_default('/')
         #flash[:notice] = "Logged in successfully"
         respond_to do |format|
+          user_param_filter = [:id, :email, :login, :first_name, :last_name]
           format.html {
             redirect_back_or_default('/')
             flash[:notice] = "Logged in successfully"
           }
           format.xml  {
-            render :xml => self.current_user.to_xml(:dasherize => false)
+            render :xml => self.current_user.to_xml(:dasherize => false, :only => user_param_filter)
           }
           format.json  {
-            render :json => self.current_user.to_json(:dasherize => false)
+            render :json => self.current_user.to_json(:dasherize => false, :only => user_param_filter)
           }
         end           
       else

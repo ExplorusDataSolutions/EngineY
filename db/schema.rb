@@ -166,6 +166,11 @@ ActiveRecord::Schema.define(:version => 20101119204114) do
   add_index "domain_themes", ["uri"], :name => "index_domain_themes_on_uri"
 
   create_table "event_reviews", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "group_id"
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
