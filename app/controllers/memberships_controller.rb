@@ -22,6 +22,7 @@ class MembershipsController < ApplicationController
   
   def show
     @membership = Membership.find(params[:id]) 
+    #debugger
     if @membership
       respond_to do |format|
         format.xml { render :xml => @membership } 
@@ -63,9 +64,20 @@ class MembershipsController < ApplicationController
     else
       role = Role.find_by_rolename('user')
     end
-    @membership = Membership.create({:group_id=>params[:group_id], 
-                                     :user_id=>user.id,
-                                     :role_id=>role.id})
+    
+    is_authorized = false
+    if Group.find_by_id(group_id).private
+      if user.roles.include?(Role.group_admin) || user.roles.include?(Role.admin) || user.roles.include?(Role.creator)
+        is_authorized = true
+      end
+    else
+      is_authorized = true
+    end   
+
+    @membership = Membership.create({:group_id => params[:group_id], 
+                                     :user_id => user.id,
+                                     :role_id => role.id,
+                                     :authorized => is_authorized})
     if @membership.save
       respond_to do |format|
         format.html { redirect_to group_path(group_id) }
@@ -85,30 +97,50 @@ class MembershipsController < ApplicationController
   # Changes a membership, typically used to change the role of a user, i.e.
   # to promote or demote a member from the group admin role.
   def update
-    @membership = Membership.find(params[:id])
+    if params[:user_ids].is_a?(Array)
+      params[:user_ids].each do |id| 
+        task = params[:task]
+        user = User.find(id)
+        group_id = params[:group_id]
+
+        if task == 'demote'
+          permissions = Permission.find_by_user_id_and_group_id_and_role_id(id, group_id, Role.group_admin.id)
+          permissions.destroy
+        else
+          Permission.create(:user_id => id, :group_id => group_id, :role_id => Role.group_admin.id) #unless user.roles.include?(Role.group_admin)
+        end
+      end
+    end
     respond_to do |format|
-      if @membership.update_attributes(params[:membership])               
-        format.html { 
-          flash[:notice] = 'Membership was successfully updated.'
-          redirect_to(@membership) 
-         }
-        format.xml  { head :ok }
-        format.json { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @membership.errors, :status => :unprocessable_entity }
-        format.json  { render :json => @membership.errors.to_json, :status => :unprocessable_entity }
+      format.html { 
+        flash[:notice] = 'Membership was successfully updated.'
+       }
+      format.xml  { head :ok }
+      format.json { head :ok }
+    end
+  end
+  
+  def authorize
+    if params[:user_ids].is_a?(Array)
+      params[:user_ids].each do |id| 
+        membership = Membership.find_by_user_id_and_group_id(id, params[:group_id])
+        membership.authorized = true
+        membership.save
       end
     end
   end
   
-  
   # Remove a user from a group
   def destroy
-    @membership = Membership.find_by_user_id_and_group_id(params[:user_id], params[:group_id])
-    @membership.destroy
+    if params[:user_ids].is_a?(Array)
+      params[:user_ids].each do |id| 
+        @membership = Membership.find_by_user_id_and_group_id(id, params[:group_id])
+        @membership.destroy       
+      end
+    end
     respond_to do |format|
-      format.html { redirect_to(groups_url) }
+      format.html { 
+      }
       format.xml  { head :ok }
       format.json { head :ok } 
     end

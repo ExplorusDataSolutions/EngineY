@@ -25,6 +25,9 @@ limitations under the License.
 		<span id="group_name_txt">
 			<%= link_to group.name, group_url(group) %>
 		</span><br/>
+    <% if group.private %>
+      This group requires authorization<br/>
+    <% end %>
 		<%= group.users.size %> members
 	</div>
 </div>

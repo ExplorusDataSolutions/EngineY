@@ -31,7 +31,8 @@ class Group < ActiveRecord::Base
   
   has_many :memberships, :dependent => :destroy
   has_many :users, :through => :memberships, 
-                                :order => Group.connection.adapter_name == 'PostgreSQL' ? 'RANDOM()' : 'RAND()' 
+                               :order => Group.connection.adapter_name == 'PostgreSQL' ? 'RANDOM()' : 'RAND()'
+#                               :conditions => ['authorized = ?', true]
   
   belongs_to :creator, :class_name => 'User' # the creator
   
@@ -44,6 +45,7 @@ class Group < ActiveRecord::Base
   
   validates_presence_of :name
   
+  validates_inclusion_of :private, :in => [true, false] 
   
   after_create :log_activity
 
@@ -59,10 +61,12 @@ class Group < ActiveRecord::Base
     @@cached_groups = nil
   end
   
+  def is_private
+    self.private
+  end
   
   def log_activity
     Activity.create!(:item => self, :user => self.creator)
   end
-    
-  
+      
 end

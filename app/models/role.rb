@@ -39,6 +39,17 @@ class Role < ActiveRecord::Base
   def self.admin
     @@admin ||= Role.find_by_rolename('administrator')
   end
-  
-  
+
+  def self.group_admin
+    @@group_admin ||= Role.find_by_rolename('group_admin')
+  end
+
+  def self.user
+    @@user ||= Role.find_by_rolename('user')
+  end 
+
+  def self.administrator
+    @@administrator ||= Role.find_by_rolename('adminstrator')
+  end 
+
 end

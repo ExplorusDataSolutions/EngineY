@@ -26,26 +26,81 @@ limitations under the License.
 <h1><%= @group.name %> Members (<%= @users.size %>)</h1>
 <div id="return_link"><%= link_to "Back to #{@group.name}", group_path(@group) %></div>
 
+<script>
+  
+  function do_membership_task(task) {
+    function reload() {
+      window.location.reload();
+    }
+
+    ids = []
+    $('#gridNode input[type=checkbox]:checked').each(function() { ids.push(this.name) })
+    
+    if (task === 'promote' || task === 'demote') {
+      $.post('/memberships/update', { user_ids: ids, group_id: <%= @group.id %>, task: status }, function(data) { reload() });
+    } else if (task === 'remove') {
+      $.post('/memberships/destroy', { user_ids: ids, group_id: <%= @group.id %> }, function(data) { reload() });
+    } else if (task === 'authorize') {
+        $.post('/memberships/authorize', { user_ids: ids, group_id: <%= @group.id %> }, function(data) { reload(); });
+    }
+  }
+ 
+</script>
+<% 
+  is_private = (@group.private == true)
+%>
 
 <div id="users_table">
 	<% if logged_in? && current_user.is_group_admin(@group) %>
 		<div id="manage_btns">
-			<button id="promote_btn" onclick="handle_promote_to_admin_btn()">Promote to Administrator</button>
-			<button id="demote_btn" onclick="handle_demote_from_admin_btn()">Demote from Administrator</button>
-			<button id="remove_btn" onclick="handle_remove_from_group_btn()">Remove</button>
+			<button id="promote_btn" onclick="do_membership_task('promote')">Promote to Administrator</button>
+			<button id="demote_btn" onclick="do_membership_task('demote')">Demote from Administrator</button>
+			<button id="remove_btn" onclick="do_membership_task('remove')">Remove from group</button>
+    <% if is_private %>
+			<button id="remove_btn" onclick="do_membership_task('authorize')">Authorize</button>
+		<% end %>
 		</div>
 	<% end %>
 	<div class="gridContainer">
 		<table id="gridNode" >
 			<thead>
 				<tr>
+          <th></th>
 					<th field="id" width="30px">ID</th>
 					<th field="name" width="100px">Name</th>
 					<th field="email" width="160px">Email</th>
 					<th field="role" width="70px">Role</th>
 					<th field="created_at" width="180px">Date Joined</th>
+        <% if is_private %>
+          <%= "<th field='authorized' width='60px'>Authorized</th>" %>
+				<% end %>
 				</tr>
 			</thead>
+      <tbody>
+
+        <% @users.each do |user| %>
+          <% if user.id != current_user.id %>
+            <% 
+              roles = []
+              user.roles.each { |role| roles.push(role.rolename) }
+              roles = roles.join(', ').chomp
+            %>
+
+            <% 
+              if is_private
+                authorized = false
+                user.memberships.each { |item| 
+                  if item.group_id == @group.id
+                    authorized = (item.authorized == true)
+                  end 
+                }
+                authorized_markup = "<td>#{authorized}</td>"
+              end
+            %>
+            <%= "<tr><td><input type='checkbox' name='#{user.id}' /></td><td>#{user.id}</td><td>#{user.name}</td><td>#{user.email}</td><td>#{roles}</td><td>#{user.created_at}</td>#{authorized_markup}</tr>" %>
+          <% end %>
+        <% end %>
+      </tbody>
 		</table>
 	</div>
 </div>

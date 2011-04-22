@@ -24,6 +24,12 @@ limitations under the License.
 		<%= f.text_field :name, :class=>'input_field' %>
 	</div>
 	<div class="form_field">
+    	<label>Privacy:</label>
+      <% {:private => 'true', :public => 'false'}.each do |key, value| %>
+        <%= "<label for='private_#{value}'>#{key}</label>" %><%= radio_button_tag "group[private]", value, (key == :public), :class=>'input_field' %>
+  		<% end %>
+	</div>
+	<div class="form_field">
     	<label for="photo">Image:</label>
 		<% if (@group.profile_photo) %>
 				<%= image_tag(@group.profile_photo.public_filename(:thumb)) %>
