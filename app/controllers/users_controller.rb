@@ -126,7 +126,7 @@ class UsersController < ApplicationController
   
   def display_group_members_page 
     @group = Group.find(params[:group_id])
-    @users = @group.users
+    @users = @group.all_users
     respond_to do |format|
       format.html { render :template => 'groups/manage_group_users' }
       format.xml  { render :xml => @users.to_xml(:dasherize => false) }

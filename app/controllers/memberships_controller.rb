@@ -59,15 +59,17 @@ class MembershipsController < ApplicationController
   def create
     group_id = params[:group_id]
     user = User.find(params[:user_id])
-    if user.is_admin
+    group = Group.find_by_id(group_id)
+    if user.is_admin || group.creator == current_user
       role = Role.find_by_rolename('group_admin')
     else
       role = Role.find_by_rolename('user')
     end
     
     is_authorized = false
-    if Group.find_by_id(group_id).private
-      if user.roles.include?(Role.group_admin) || user.roles.include?(Role.admin) || user.roles.include?(Role.creator)
+
+    if group.private
+      if user.is_admin || group.creator == current_user
         is_authorized = true
       end
     else

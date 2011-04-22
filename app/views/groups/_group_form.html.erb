@@ -25,8 +25,8 @@ limitations under the License.
 	</div>
 	<div class="form_field">
     	<label>Privacy:</label>
-      <% {:private => 'true', :public => 'false'}.each do |key, value| %>
-        <%= "<label for='private_#{value}'>#{key}</label>" %><%= radio_button_tag "group[private]", value, (key == :public), :class=>'input_field' %>
+      <% {:private => true, :public => false}.each do |key, value| %>
+        <%= "<label for='private_#{value}'>#{key}</label>" %><%= radio_button_tag "group[private]", value, ((@group.private == true) == value), :class=>'input_field' %>
   		<% end %>
 	</div>
 	<div class="form_field">

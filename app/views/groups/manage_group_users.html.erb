@@ -27,7 +27,6 @@ limitations under the License.
 <div id="return_link"><%= link_to "Back to #{@group.name}", group_path(@group) %></div>
 
 <script>
-  
   function do_membership_task(task) {
     function reload() {
       window.location.reload();
@@ -37,15 +36,20 @@ limitations under the License.
     $('#gridNode input[type=checkbox]:checked').each(function() { ids.push(this.name) })
     
     if (task === 'promote' || task === 'demote') {
-      $.post('/memberships/update', { user_ids: ids, group_id: <%= @group.id %>, task: status }, function(data) { reload() });
-    } else if (task === 'remove') {
-      $.post('/memberships/destroy', { user_ids: ids, group_id: <%= @group.id %> }, function(data) { reload() });
-    } else if (task === 'authorize') {
-        $.post('/memberships/authorize', { user_ids: ids, group_id: <%= @group.id %> }, function(data) { reload(); });
+      $.post('/memberships/update', { user_ids: ids, group_id: <%= @group.id %>, task: task }, function(data) { reload() });
+    } else {
+      $.post('/memberships/' + task, { user_ids: ids, group_id: <%= @group.id %> }, function(data) { reload() });
     }
   }
  
 </script>
+
+<style>
+ tr.disabled {
+    background-color: #efefef;
+    color: #afafaf;
+  }
+</style>
 <% 
   is_private = (@group.private == true)
 %>
@@ -55,7 +59,7 @@ limitations under the License.
 		<div id="manage_btns">
 			<button id="promote_btn" onclick="do_membership_task('promote')">Promote to Administrator</button>
 			<button id="demote_btn" onclick="do_membership_task('demote')">Demote from Administrator</button>
-			<button id="remove_btn" onclick="do_membership_task('remove')">Remove from group</button>
+			<button id="remove_btn" onclick="do_membership_task('destroy')">Remove from group</button>
     <% if is_private %>
 			<button id="remove_btn" onclick="do_membership_task('authorize')">Authorize</button>
 		<% end %>
@@ -79,26 +83,32 @@ limitations under the License.
       <tbody>
 
         <% @users.each do |user| %>
-          <% if user.id != current_user.id %>
-            <% 
-              roles = []
-              user.roles.each { |role| roles.push(role.rolename) }
-              roles = roles.join(', ').chomp
-            %>
+          <% 
+            roles = []
+            user.roles.each { |role| roles.push(role.rolename) }
+            roles = roles.join(', ').chomp
+          %>
 
-            <% 
-              if is_private
-                authorized = false
-                user.memberships.each { |item| 
-                  if item.group_id == @group.id
-                    authorized = (item.authorized == true)
-                  end 
-                }
-                authorized_markup = "<td>#{authorized}</td>"
-              end
-            %>
-            <%= "<tr><td><input type='checkbox' name='#{user.id}' /></td><td>#{user.id}</td><td>#{user.name}</td><td>#{user.email}</td><td>#{roles}</td><td>#{user.created_at}</td>#{authorized_markup}</tr>" %>
-          <% end %>
+          <% 
+            if is_private
+              authorized = false
+              user.memberships.each { |item| 
+                if item.group_id == @group.id
+                  authorized = (item.authorized == true)
+                end 
+              }
+              authorized_markup = "<td>#{authorized}</td>"
+            end
+            
+            tr_class = ''
+            checkbox_markup = ''
+            if user.id == current_user.id
+              checkbox_markup = "disabled='true'"
+              tr_class = 'class="disabled"'
+            end
+          %>
+          <%= "<tr #{tr_class}><td><input type='checkbox' name='#{user.id}' #{checkbox_markup} /></td><td>#{user.id}</td><td>#{user.name}</td><td>#{user.email}</td><td>#{roles}</td><td>#{user.created_at}</td>#{authorized_markup}</tr>" %>
+
         <% end %>
       </tbody>
 		</table>
