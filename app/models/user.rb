@@ -85,8 +85,34 @@ class User < ActiveRecord::Base
                   :state, :state_id, :password, :password_confirmation, :website, :blog, 
                   :blog_feed, :about_me, :display_tweets, :twitter_id, :linked_in_url, 
                   :facebook_url, :receive_emails, :last_seen_at, :login_count, :facebook_id,
-                  :activated_at, :enabled
+                  :activated_at, :enabled, :name
   
+  def to_xml(options = {})
+    options[:indent] ||= 2
+    xml = options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
+    xml.instruct! unless options[:skip_instruct]
+    xml.user do 
+      xml.tag!(:thumb_url, profile_photo.thumbnails[1].public_filename())
+      xml.tag!(:name, self.name)
+      xml.tag!(:country, self.country.name)
+      xml.tag!(:state, self.state.name.capitalize)
+      xml.tag!(:email, self.email)
+      xml.tag!(:organization, self.organization)
+      xml.tag!(:organization_url, self.company_url)
+      xml.tag!(:phone, self.phone)
+      xml.tag!(:about_me, self.about_me)
+      xml.tag!(:skills, self.skills)
+      xml.tag!(:login, self.login)
+      self.friends.each do |friend| 
+        xml.friend do
+          xml.tag!(:name, friend.name)
+          xml.tag!(:id, friend.id)
+          xml.tag!(:thumb_url, friend.profile_photo.nil? ? '' : friend.profile_photo.thumbnails[1].public_filename())
+        end
+      end
+    end
+  end
+
   # we want the user activity stream message after activating, not after creating
   #after_create :log_activity
   after_create :register_user_to_fb
@@ -234,11 +260,11 @@ class User < ActiveRecord::Base
   
   def name
     if first_name && last_name
-      first_name + ' ' + last_name
+      first_name.capitalize + ' ' + last_name.capitalize
     elsif first_name
-      first_name
+      first_name.capitalize
     elsif last_name
-      last_name
+      last_name.capitalize
     else
       login
     end

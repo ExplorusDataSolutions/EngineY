@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   
   before_filter :login_required, :only => [:edit, :update]
 
-  skip_filter :api_filter, :only => :create
+  skip_filter :api_filter, :only => [:create, :show]
   
   
   def online_users
