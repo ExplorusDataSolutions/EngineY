@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
     xml = options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
     xml.instruct! unless options[:skip_instruct]
     xml.user do 
-      xml.tag!(:thumb_url, profile_photo.thumbnails[1].public_filename())
+      xml.tag!(:thumb_url, (self.profile_photo.nil? || self.profile_photo.thumbnails[1].nil?) ? '' : self.profile_photo.thumbnails[1].public_filename())
       xml.tag!(:name, self.name)
       xml.tag!(:country, self.country.name)
       xml.tag!(:state, self.state.name.capitalize)
