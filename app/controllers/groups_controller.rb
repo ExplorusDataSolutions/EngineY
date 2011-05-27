@@ -33,25 +33,29 @@ class GroupsController < ApplicationController
   # must be an admin to create new groups
   before_filter :check_admin_auth, :only => [:new, :create]
   
-  skip_filter :api_filter, :only => [:index]
+  skip_filter :api_filter, :only => [:index, :user_data, :show]
   
   def user_data
-      @group = Group.find(params[:group_id])
-      @users = @group.users
-      items = []
-      @users.each do |user|
-        membership = user.memberships.find_by_group_id(@group.id)
-        items.push({:id => user.id,
-                    :name => user.name,
-                    :email => user.email,
-                    :role => membership.role.rolename,
-                    :created_at => membership.created_at})
-      end
-      result = {}
-      result[:identifier] = 'id'
-      result['label'] = 'id'
-      result['items'] = items
-      render :json=>result, :layout=>false
+    @group = Group.find(params[:group_id])
+    @users = @group.all_users
+    items = []
+    @users.each do |user|
+      membership = user.memberships.find_by_group_id(@group.id)
+      items.push({:id => user.id,
+                  :name => user.name,
+                  :email => user.email,
+                  :role => membership.role.rolename,
+                  :created_at => membership.created_at,
+                  :authorized => membership.authorized})
+    end
+    result = {}
+    result[:identifier] = 'id'
+    result['label'] = 'id'
+    result['items'] = items
+    respond_to do |format|
+      format.xml  { render :xml => result }
+      format.json { render :json => result.to_json }
+    end
   end
   
   

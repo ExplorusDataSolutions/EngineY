@@ -106,10 +106,13 @@ class MembershipsController < ApplicationController
         group_id = params[:group_id]
 
         if task == 'demote'
+          # This should be deleting memberships not permissions right?
           permissions = Permission.find_by_user_id_and_group_id_and_role_id(id, group_id, Role.group_admin.id)
           permissions.destroy
         else
-          Permission.create(:user_id => id, :group_id => group_id, :role_id => Role.group_admin.id) #unless user.roles.include?(Role.group_admin)
+          membership = Membership.find_by_user_id_and_group_id(id, group_id)
+          membership.role_id = Role.group_admin.id
+          membership.save
         end
       end
     end
