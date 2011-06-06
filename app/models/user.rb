@@ -94,8 +94,8 @@ class User < ActiveRecord::Base
     xml.user do 
       xml.tag!(:thumb_url, (self.profile_photo.nil? || self.profile_photo.thumbnails[1].nil?) ? '' : self.profile_photo.thumbnails[1].public_filename())
       xml.tag!(:name, self.name)
-      xml.tag!(:country, self.country.name)
-      xml.tag!(:state, self.state.name.capitalize)
+      xml.tag!(:country, self.country.name) unless self.country.nil?
+      xml.tag!(:state, self.state.name.capitalize) unless self.state.nil?
       xml.tag!(:email, self.email)
       xml.tag!(:organization, self.organization)
       xml.tag!(:organization_url, self.company_url)

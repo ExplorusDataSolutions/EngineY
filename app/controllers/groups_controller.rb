@@ -31,7 +31,7 @@ class GroupsController < ApplicationController
   before_filter :check_group_auth, :only => [:edit, :update]
   
   # must be an admin to create new groups
-  before_filter :check_admin_auth, :only => [:new, :create]
+  #before_filter :check_admin_auth, :only => [:new, :create]
   
   skip_filter :api_filter, :only => [:index, :user_data, :show]
   
