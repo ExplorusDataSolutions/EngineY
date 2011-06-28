@@ -82,10 +82,10 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :id, :login, :email, :first_name, :last_name, :sex, :city, :country_id, 
-                  :state, :state_id, :password, :password_confirmation, :website, :blog, 
+                  :state, :state_id, :occupation, :organization, :password, :password_confirmation, :phone, :website, :blog, 
                   :blog_feed, :about_me, :display_tweets, :twitter_id, :linked_in_url, 
-                  :facebook_url, :receive_emails, :last_seen_at, :login_count, :facebook_id,
-                  :activated_at, :enabled, :name
+                  :facebook_url, :skills, :receive_emails, :last_seen_at, :login_count, :facebook_id,
+                  :activated_at, :enabled, :name, :website, :company_url
   
   def to_xml(options = {})
     options[:indent] ||= 2
@@ -94,11 +94,14 @@ class User < ActiveRecord::Base
     xml.user do 
       xml.tag!(:thumb_url, (self.profile_photo.nil? || self.profile_photo.thumbnails[1].nil?) ? '' : self.profile_photo.thumbnails[1].public_filename())
       xml.tag!(:name, self.name)
+      xml.tag!(:first_name, self.first_name)
+      xml.tag!(:last_name, self.last_name)      
       xml.tag!(:country, self.country.name) unless self.country.nil?
       xml.tag!(:state, self.state.name.capitalize) unless self.state.nil?
       xml.tag!(:email, self.email)
       xml.tag!(:organization, self.organization)
       xml.tag!(:organization_url, self.company_url)
+      xml.tag!(:occupation, self.occupation)      
       xml.tag!(:phone, self.phone)
       xml.tag!(:about_me, self.about_me)
       xml.tag!(:skills, self.skills)

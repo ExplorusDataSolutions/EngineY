@@ -25,9 +25,9 @@ class UsersController < ApplicationController
                               :theme_advanced_buttons3 => ""
                             }
   
-  before_filter :login_required, :only => [:edit, :update]
+  before_filter :login_required, :only => [:edit]
 
-  skip_filter :api_filter, :only => [:create, :show]
+  skip_filter :api_filter, :only => [:create, :show, :update]
   
   
   def online_users
@@ -287,10 +287,12 @@ class UsersController < ApplicationController
   
   
   def update
+=begin
     if (params[:id].to_s != current_user.id.to_s)
       redirect_back_or_default('/')
     end
     sleep 4  # required for photo upload
+=end    
     @user = User.find(params[:id])
     respond_to do |format|
       if @user.update_attributes(params[:user])        
