@@ -98,9 +98,9 @@ class User < ActiveRecord::Base
       xml.tag!(:last_name, self.last_name)      
       xml.tag!(:country, self.country.name) unless self.country.nil?
       xml.tag!(:state, self.state.name.capitalize) unless self.state.nil?
-      xml.tag!(:email, self.email)
+      xml.tag!(:email, self.email) unless !self.email?
       xml.tag!(:organization, self.organization)
-      xml.tag!(:organization_url, self.company_url)
+      xml.tag!(:organization_url, self.company_url) unless !self.company_url?
       xml.tag!(:occupation, self.occupation)      
       xml.tag!(:phone, self.phone)
       xml.tag!(:about_me, self.about_me)
