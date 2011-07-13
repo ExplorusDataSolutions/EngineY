@@ -106,6 +106,8 @@ class User < ActiveRecord::Base
       xml.tag!(:about_me, self.about_me)
       xml.tag!(:skills, self.skills)
       xml.tag!(:login, self.login)
+      xml.tag!(:id, self.id)
+=begin
       self.friends.each do |friend| 
         xml.friend do
           xml.tag!(:name, friend.name)
@@ -113,6 +115,7 @@ class User < ActiveRecord::Base
           xml.tag!(:thumb_url, friend.profile_photo.nil? ? '' : friend.profile_photo.thumbnails[1].public_filename())
         end
       end
+=end      
     end
   end
 

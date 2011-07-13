@@ -19,7 +19,7 @@
 =end
 class FriendsController < ApplicationController
   
-  before_filter :login_required, :except => [:show]
+  before_filter :login_required, :except => [:show, :create, :update, :index]
 
   skip_filter :api_filter, :only => [:index]
   
