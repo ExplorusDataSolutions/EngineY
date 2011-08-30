@@ -251,6 +251,7 @@ class UsersController < ApplicationController
           Invite.accept(params[:invite_code]) 
         end
         @user.set_photo(params[:user_photo])
+        @user.enable_api!
         respond_to do |format|
           format.html {
             flash[:notice] = "Thanks for signing up!"

@@ -92,7 +92,7 @@ class SessionsController < ApplicationController
         #redirect_back_or_default('/')
         #flash[:notice] = "Logged in successfully"
         respond_to do |format|
-          user_param_filter = [:id, :email, :login, :first_name, :last_name]
+          user_param_filter = [:id, :email, :login, :first_name, :last_name, :api_key]
           format.html {
             redirect_back_or_default('/')
             flash[:notice] = "Logged in successfully"

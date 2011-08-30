@@ -107,6 +107,7 @@ class User < ActiveRecord::Base
       xml.tag!(:skills, self.skills)
       xml.tag!(:login, self.login)
       xml.tag!(:id, self.id)
+      xml.tag!(:api_key, self.api_key)      
 =begin
       self.friends.each do |friend| 
         xml.friend do
