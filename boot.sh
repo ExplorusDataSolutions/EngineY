@@ -18,4 +18,4 @@ else
 fi
 
 rvm use 1.8.7
-nohup script/server -p 3002&
+script/server -p 3002 -d
