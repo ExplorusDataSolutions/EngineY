@@ -26,8 +26,8 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     init
     setup_email(user)
-    @subject    += 'Please activate your new account'  
-    @body[:url]  = "#{@url}/activate/#{user.activation_code}" 
+    @subject = "Welcome to the #{@network_name}"
+    @body[:url] = "#{@url}/activate/#{user.activation_code}" 
   end
   
   
@@ -108,17 +108,23 @@ class UserMailer < ActionMailer::Base
     @body[:url]  = "#{@url}"
   end
   
+  def forgot_password(user)
+    init
+    setup_email(user)
+    @subject     = "#{@network_name} password reset"
+  end  
   
   protected
   # Setup an email that will be sent to a single user
   def setup_email(user)
     @recipients  = "#{user.email}"
-    @from        = "#{@admin_email}"
-    @subject     = "[#{@network_name}] "
+    @from        = "WEHUB <#{@admin_email}>"
+    @subject     = "[#{@network_name}]"
     @sent_on     = Time.now
     @body[:user] = user
+    @content_type = "text/html"
   end
-  
+
   
   # Setup an email that will be sent only to site admins
   def setup_admin_email(user)

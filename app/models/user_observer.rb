@@ -29,12 +29,14 @@ class UserObserver < ActiveRecord::Observer
 
   # Look for save when user has been activated
   def after_save(user)  
+=begin
     if !user.email.include?('email.com')
       UserMailer.deliver_activation(user) if user.recently_activated?
       if !User.admins_and_creators.empty?
         UserMailer.deliver_new_user_activated(user) if user.recently_activated?
       end
     end
+=end    
   end
 
 

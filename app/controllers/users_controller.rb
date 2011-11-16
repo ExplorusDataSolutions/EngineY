@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   
   before_filter :login_required, :only => [:edit]
 
-  skip_filter :api_filter, :only => [:create, :show, :update, :index]
+  skip_filter :api_filter, :only => [:create, :show, :update, :index, :update_password]
   
   
   def online_users
@@ -392,6 +392,43 @@ class UsersController < ApplicationController
     end 
   end
   
+  def forgot_password
+    user =  User.find_by_email(params[:email])
+
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("1".."9").to_a
+    newpass = ""
+    1.upto(10) { |i| newpass << chars[rand(chars.size-1)] }
+    user.password = newpass
+    user.password_confirmation = newpass
+    user.save
+
+    UserMailer.deliver_forgot_password(user)
+
+    cookies.delete :auth_token
+    reset_session
+
+    render :nothing => true and return    
+  end
+  
+  def update_password
+    if request.post?
+      user = self.current_user
+      params_user = params[:user]
+
+      if !user.nil? && user.authenticated?(params_user[:password_old]) && !(params_user[:password_old].blank? || params_user[:password].blank? || params_user[:password_confirmation].blank?)
+        user.password = params_user[:password]
+        user.password_confirmation = params_user[:password_confirmation] 
+        if user.save
+          render :json => { :success => '' } and return
+        else
+          render :json => { :errors => user.errors  } and return
+        end
+      else
+        render :json => { :errors => [['password_old', 'original password is not valid']]  } and return
+      end
+    end
+    render :nothing => true
+  end
   
   private
   def get_users_xml_select

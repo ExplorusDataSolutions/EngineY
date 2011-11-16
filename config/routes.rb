@@ -53,6 +53,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'users/promote_to_group_admin', :controller=>'users', :action=>'promote_to_group_admin'
   map.connect 'wall_posts/delete', :controller=>'wall_posts', :action=>'destroy'
   map.connect 'users/authenticate.:format', :controller=>'users', :action=>'authenticate'
+  map.connect 'user/forgot_password', :controller=>'users', :action=>'forgot_password'
+  map.connect 'user/update_password', :controller=>'users', :action=>'update_password'  
   map.connect 'blog_post_topics/ajax_save', :controller=>'blog_post_topics', :action=>'ajax_save'
   map.connect 'blog_post_topics/fetch_topic_list', :controller=>'blog_post_topics', :action=>'fetch_topic_list'
   map.connect 'likes/like_text', :controller=>'likes', :action=>'like_text'
