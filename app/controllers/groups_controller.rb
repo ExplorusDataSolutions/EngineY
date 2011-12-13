@@ -67,11 +67,24 @@ class GroupsController < ApplicationController
   
   
   def check_group_auth
-    if !current_user.is_group_admin(Group.find(params[:id]))
+    if !current_user.is_group_admin(Group.find(params[:id])) && !(Group.find(params[:id]).creator_id == current_user.id)
       access_denied
     end
   end
   
+  def role
+    role = []
+    begin
+      if current_user.is_admin
+        role.push('admin')
+      end
+      if Group.find(params[:group_id]).creator_id == current_user.id
+        role.push('group_admin')
+      end
+    rescue
+    end
+    render :json => { :role => role.empty? ? nil : role }
+  end
   
   def index
     @section = 'GROUPS'   
@@ -122,7 +135,7 @@ class GroupsController < ApplicationController
   def create
     sleep 4  # required for photo upload
     @group = Group.new(params[:group])
-    @group.creator = current_user;
+    @group.creator = current_user
     respond_to do |format|
       if @group.save
         if params[:group_photo] 

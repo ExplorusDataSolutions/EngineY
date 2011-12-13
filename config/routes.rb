@@ -50,6 +50,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'memberships/find', :controller=>'memberships', :action=>'find' 
   map.connect 'users/change_photo', :controller=>'users', :action=>'change_photo'
   map.connect 'groups/user_data', :controller=>'groups', :action=>'user_data'
+  map.connect 'groups/role', :controller=>'groups', :action=>'role'  
   map.connect 'users/promote_to_group_admin', :controller=>'users', :action=>'promote_to_group_admin'
   map.connect 'wall_posts/delete', :controller=>'wall_posts', :action=>'destroy'
   map.connect 'users/authenticate.:format', :controller=>'users', :action=>'authenticate'
