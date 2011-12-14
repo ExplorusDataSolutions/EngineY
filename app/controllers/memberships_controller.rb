@@ -19,6 +19,7 @@
 =end
 class MembershipsController < ApplicationController
   
+  skip_filter :api_filter, :only => [:create]
   
   def show
     @membership = Membership.find(params[:id]) 
