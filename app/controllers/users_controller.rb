@@ -279,7 +279,7 @@ class UsersController < ApplicationController
             render :xml => @user.errors, :status => 'failed'
           }
           format.json {
-            render :json => @user.errors, :status => 'failed'
+            render :json => @user.errors, :status => 500
           }  
         end
       end
