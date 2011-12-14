@@ -33,7 +33,7 @@ class GroupsController < ApplicationController
   # must be an admin to create new groups
   #before_filter :check_admin_auth, :only => [:new, :create]
   
-  skip_filter :api_filter, :only => [:index, :user_data, :show]
+  skip_filter :api_filter, :only => [:index, :user_data, :show, :role, :create]
   
   def user_data
     @group = Group.find(params[:group_id])
