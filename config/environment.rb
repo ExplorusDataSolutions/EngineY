@@ -80,14 +80,6 @@ Rails::Initializer.run do |config|
  
 end
 
-#ActionMailer::Base.smtp_settings = {
-#:address  => "smtp.gmail.com",
-#:port  => 25,
-#:user_name  => "timothyf@gmail.com",
-#:password  => "",
-#:authentication  => :login
-#}
-
 # sample usage
 #   event.start_time.to_s(:event_brief)
 
