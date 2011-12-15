@@ -29,6 +29,7 @@ Rails::Initializer.run do |config|
   config.gem "ruby-openid", :lib => "openid"
   config.gem "aws-s3", :lib => "aws/s3"
   config.gem "jammit"
+  config.gem "thin"
   
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
@@ -79,14 +80,6 @@ Rails::Initializer.run do |config|
  config.action_mailer.delivery_method = :smtp
  
 end
-
-#ActionMailer::Base.smtp_settings = {
-#:address  => "smtp.gmail.com",
-#:port  => 25,
-#:user_name  => "timothyf@gmail.com",
-#:password  => "",
-#:authentication  => :login
-#}
 
 # sample usage
 #   event.start_time.to_s(:event_brief)
