@@ -19,4 +19,16 @@ config.action_controller.perform_caching             = true
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
 # Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+config.action_mailer.raise_delivery_errors = true
+
+config.action_mailer.delivery_method = :smtp
+
+config.action_mailer.smtp_settings = {
+  :enable_starttls_auto => false,
+  :address              => 'email-smtp.us-east-1.amazonaws.com',
+  :port                 => 465,
+  :domain               => 'waterenvironmentalhub.ca',
+  :authentication       => 'plain',  
+  :user_name            => 'AKIAJS6XJGY3UKJCZEAQ',
+  :password             => 'Avf9bNXC/yXr9FEoJGcVEjbTAUzHwqNwH7TXe0dyBSFk',
+}  
