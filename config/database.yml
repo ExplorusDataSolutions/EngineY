@@ -34,16 +34,16 @@ production:
 development:
   adapter: postgresql
   database: enginey_development
-  username: catalogue
-  password: t3s3raDeV
+  username: 
+  password: 
   host: localhost
   encoding: UTF8
 
 test:
   adapter: postgresql
   database: enginey_test
-  username: catalogue
-  password: t3s3raDeV
+  username: 
+  password: 
   host: localhost
   encoding: UTF8
 
