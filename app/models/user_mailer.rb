@@ -118,7 +118,7 @@ class UserMailer < ActionMailer::Base
   # Setup an email that will be sent to a single user
   def setup_email(user)
     @recipients  = "#{user.email}"
-    @from        = "WEHUB <#{@admin_email}>"
+    @from        = "#{@admin_email}"
     @subject     = "[#{@network_name}]"
     @sent_on     = Time.now
     @body[:user] = user

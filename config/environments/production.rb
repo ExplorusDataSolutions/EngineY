@@ -24,11 +24,12 @@ config.action_mailer.raise_delivery_errors = true
 config.action_mailer.delivery_method = :smtp
 
 config.action_mailer.smtp_settings = {
-  :enable_starttls_auto => false,
   :address              => 'email-smtp.us-east-1.amazonaws.com',
   :port                 => 465,
   :domain               => 'waterenvironmentalhub.ca',
-  :authentication       => 'plain',  
+  :authentication       => :login,  
   :user_name            => 'AKIAJS6XJGY3UKJCZEAQ',
   :password             => 'Avf9bNXC/yXr9FEoJGcVEjbTAUzHwqNwH7TXe0dyBSFk',
-}  
+  :openssl_verify_mode  => OpenSSL::SSL::VERIFY_NONE,
+  :enable_starttls_auto => true
+}
