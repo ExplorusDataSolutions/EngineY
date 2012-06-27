@@ -1,0 +1,37 @@
+<table width="650" cellpadding="0" cellspacing="0" style="font-size: 14px;" align="center">
+
+    <tr id="header">
+        <td height="102" bgcolor="#e6f1fb" align="center">
+            <table width="95%"><tr><td align="left"><img src="http://waterenvironmentalhub.ca/images/header-logo-258.png" /></td></tr></table>
+        </td>
+    </tr>
+
+    <tr id="content">
+        <td bgcolor="#f4faff" align="center">
+            <table width="95%" cellpadding="30">
+                <tr>
+                    <td align="left">
+                        <font face="Lucida Grande, Segoe UI, Arial, Verdana, Lucida Sans Unicode, Tahoma, Sans Serif">
+
+Hi there,<br/><br/>
+You have a pending member request. <a href='http://waterenvironmentalhub.ca/user/<%= "#{@user_id}" %>'><%= "#{@user_name}" %></a> has requested permission to join your group <em><%= "#{@group_name}" %></em>. This group is private and requires your authorization to accept members.<br/><br/>
+
+You can authorize users and edit this group by visiting the WEHUB's <a href='http://waterenvironmentalhub.ca/community/groups?id=<%= "#{@group_id}#mine" %>'>group admin page</a>.<br/><br/>
+
+Thanks,<br/><br/>
+- The <a href="http://waterenvironmentalhub.ca/">WEHUB</a> Team<br/><br/>
+
+                        </font>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr id="copyright">
+        <td align="right">
+            <span style="font-size: 12px; color: #888;">&copy; 2010-<%= Time.now.year %> Water and Environmental Hub all rights reserved.</span>
+        </td>
+    </tr>
+</table>
+
