@@ -3,13 +3,13 @@ class MembershipMailer < ActionMailer::Base
   def member_joined(membership)
     setup_email(membership)
 
-    @subject = "#{@network_name} Your group #{@group_name} has a new member."
+    @subject = "#{@network_name}, group #{@group_name} has a new member."
   end
   
   def private_member_request(membership)
     setup_email(membership)
     
-    @subject = "#{@network_name} Your private group #{@group_name} has a new member request and requires your attention."
+    @subject = "#{@network_name}, your private group #{@group_name} has a new member request and requires your attention."
   end
     
   private
