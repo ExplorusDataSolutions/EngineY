@@ -1,15 +1,8 @@
 class MembershipMailer < ActionMailer::Base
-
-  def init
-    @network = Network.find(:first)
-    @url = @network.url
-    @network_name = @network.name
-    @admin_email = @network.admin_email
-  end
-  
+ 
   def member_joined(membership)
     setup_email(membership)
-    
+
     @subject = "#{@network_name} Your group #{@group_name} has a new member."
   end
   
@@ -22,9 +15,30 @@ class MembershipMailer < ActionMailer::Base
   private
   
   def setup_email(membership)
-    emails = membership.group.admins.collect { |p| p.email } 
+    @network = Network.find(:first)
+    @network_name = @network.name
+    @admin_email = @network.admin_email
+    
+    # ugly...
+    # for whatever reason membership.admins does not work as expected, the following gets the group_admins
+    all_users = membership.group.all_users
+    emails = []
+    user_ids = membership.group.memberships.collect { |m| m.user_id if m.role == Role.group_admin }
+    user_ids.each do |id|
+      if id
+        all_users.each do |user|
+          if user.id == id
+            emails.push(user.email)
+          end
+        end
+      end
+    end
+      
     emails.push(membership.group.creator.email) unless !membership.group.creator
+    emails.uniq!
+    
     @recipients  = emails.join(',')  
+
     @from        = "#{@admin_email}"
     @subject     = "[#{@network_name}]"
     @sent_on     = Time.now
@@ -32,11 +46,11 @@ class MembershipMailer < ActionMailer::Base
     @content_type = "text/html"
     
     user = membership.user
-    @user_name = user.name
-    @user_id = user.id
+    @body[:user_name] = user.name
+    @body[:user_id] = user.id
     group = membership.group
-    @group_name = group.name
-    @group_id = group.id
+    @body[:group_name] = group.name
+    @body[:group_id] = group.id
   end
 
 end
