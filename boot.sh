@@ -18,4 +18,4 @@ else
 fi
 
 rvm use 1.8.7
-thin start -p 3002 -d -e production
+thin start -p 3005 -s4 -d -e production 
