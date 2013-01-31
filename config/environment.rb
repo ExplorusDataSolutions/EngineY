@@ -25,11 +25,11 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
   
-  config.gem 'disguise'
-  config.gem "ruby-openid", :lib => "openid"
-  config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "jammit"
-  config.gem "thin"
+  #config.gem 'disguise'
+  #config.gem "ruby-openid", :lib => "openid"
+  #config.gem "aws-s3", :lib => "aws/s3"
+  #config.gem "jammit"
+  #config.gem "thin"
   
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
